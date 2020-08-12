@@ -1,4 +1,77 @@
+//-- myPOSE random
 
+int N_SERVOS = 3; // 伺服馬達的個數
+
+// 參數：校正的位置 (要調整的角度)
+int adj[]={ 0, 0, 0 };
+
+// 參數：起始位置
+int pos[]={ 90,90,90 };  // 起始位置
+
+// TEMPO: BPM
+int tempo_base = 120;
+
+#define INTERVALTIME 10.0 
+
+// 參數：各伺服馬達的腳位
+#define PIN_TH 4
+#define PIN_HL 5
+#define PIN_HR 6
+
+#include <Servo.h>
+Servo S0, S1, S2;
+
+
+void help(void)
+{
+  Serial.println("This is used to calibration the servos for 'Otto'");
+  Serial.println("The interface uses single character controls");
+  Serial.println("");
+  Serial.println("'0' - HOME");
+  Serial.println("'a, b, c, d' - MOVE");
+  Serial.println("");
+}
+
+
+// 處理輸入的字元
+void processChar(char c)
+{
+  int s = sizeof(pos);
+  int new0[] = { 90,  90,  90 };
+  int new1[] = { 90, 150,  30 };
+  int new2[] = { 90,  30, 150 };
+  int new3[] = { 90, 150, 150 };
+  int new4[] = { 90,  30,  30 };
+  int new5[] = { 40, 150,  30 };
+  int new6[] = {140,  30, 150 };
+
+  int pos_now[] = {90, 90, 90};
+
+  int v1, v2, v3, vt;
+  int u1, u2, u3, ut;
+
+  int t = tempo_base;
+  switch(c)
+  {
+    case '0':
+       tempo_servo(t*2, new0);
+       break;
+       
+    case 'a':
+       for(int i=0; i<10; i++)
+       {
+         v1 = random(90-50, 90+50);
+         v2 = random(90-80, 90+80);
+         v3 = random(90-80, 90+80);
+         vt = random(1, 4);
+         pos_now[0] = v1;
+         pos_now[1] = v2;
+         pos_now[2] = v3;
+         tempo_servo(t*2, pos_now);
+       }
+       tempo_servo(t*2, new0);
+       break;
+       
     case 'b':
        for(int i=0; i<5; i++)
        {
